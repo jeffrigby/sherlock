@@ -248,14 +248,17 @@ class DefaultController extends Controller
           $tags['uploaded_file'] = $uploaded_file;
           $cache->set($cache_token_key, $uploaded_file);
           $tags['uploaded_file']['cached'] = FALSE;
+
+          // This API takes a while to tag
+          sleep(10);
+
         } catch (ClientException $e) {
           $tags['uploaded_file']['error'] = TRUE;
           $tags['uploaded_file']['message'] = $e->getMessage();
         }
       }
 
-      // This API takes a while to tag
-      sleep(10);
+
 
       if (!empty($tags['uploaded_file']['token'])) {
         try {
