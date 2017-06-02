@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+ <div class="container">
+    <div class="row">
+        {{ form_start(form) }}
+        {{ form_row(form.image) }}
+        {{ form_end(form) }}
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Image</th>
+                <th>Filename</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for image in images %}
+                <tr>
+                    <td> <a href="/report/{{ image.id }}">
+                            <img src="{{ asset('/uploads/' ~ image.image) | imagine_filter('my_thumb') }}"
+                                                               height="51" width="76" title="{{ image.image }}" />
+                        </a>
+                    </td>
+                    <td>{{ image.image }}</td>
+                    <td>
+                       <a href="/report/{{ image.id }}"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span></a>
+                       <a href="/delete/{{ image.id }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#appbundle_image_image").fileinput({
+          previewFileType: "image",
+          browseClass: "btn btn-success",
+          browseLabel: "Pick Image",
+          browseIcon: "<i class=\"glyphicon glyphicon-picture\"></i> ",
+          removeClass: "btn btn-danger",
+          removeLabel: "Delete",
+          removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
+          uploadClass: "btn btn-info",
+          uploadLabel: "Upload",
+          uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i> "
+        });
+      });
+    </script>
+{% endblock %}

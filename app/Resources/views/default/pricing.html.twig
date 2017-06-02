@@ -1,0 +1,182 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <h2>Pricing Info</h2>
+            <h3><a href="https://cloud.google.com/vision/docs/pricing" target="_blank">Google Vision API</a></h3>
+            <table class="table">
+                <tbody><tr>
+                    <th rowspan="2">Feature</th>
+                    <th colspan="4" style="text-align: center;">Price per 1000 units</th>
+                </tr>
+                <tr>
+                    <th>First 1000 units/month</th>
+                    <th>Units 1001 - 5,000,000 / month</th>
+                    <th>Units 5,000,001 - 20,000,000 / month</th>
+                </tr>
+                <tr>
+                    <td>Label Detection</td>
+                    <td>Free</td>
+                    <td>$1.50</td>
+                    <td>$1.00</td>
+                </tr>
+                <tr>
+                    <td>Text Detection</td>
+                    <td>Free</td>
+                    <td>$1.50</td>
+                    <td>$0.60</td>
+                </tr>
+                <tr>
+                    <td>Safe Search (explicit content) Detection</td>
+                    <td>Free</td>
+                    <td>Now free with Label Detection</td>
+                    <td>Now free with Label Detection</td>
+                </tr>
+                <tr>
+                    <td>Facial Detection</td>
+                    <td>Free</td>
+                    <td>$1.50</td>
+                    <td>$0.60</td>
+                </tr>
+                <tr>
+                    <td>Landmark Detection</td>
+                    <td>Free</td>
+                    <td>$1.50</td>
+                    <td>$0.60</td>
+                </tr>
+                <tr>
+                    <td>Logo Detection</td>
+                    <td>Free</td>
+                    <td>$1.50</td>
+                    <td>$0.60</td>
+                </tr>
+                <tr>
+                    <td>Image Properties</td>
+                    <td>Free</td>
+                    <td>$1.50</td>
+                    <td>$0.60</td>
+                </tr>
+                <tr>
+                    <td>Web Detection</td>
+                    <td>Free</td>
+                    <td>$3.50</td>
+                    <td><a href="https://support.google.com/cloud/contact/vision_api_quota_request_form">Contact Google for more information</a></td>
+                </tr>
+                <tr>
+                    <td>Document Text Detection</td>
+                    <td>Free</td>
+                    <td>$3.50</td>
+                    <td><a href="https://support.google.com/cloud/contact/vision_api_quota_request_form">Contact Google for more information</a></td>
+                </tr>
+                </tbody></table>
+        </div>
+        <div class="row">
+            <h3><a href="https://developer.clarifai.com/pricing/" target="_blank">Clarafai Pricing</a></h3>
+            <h4>Free Tier</h4>
+            <h5>Search and predict</h5>
+            <ul>
+                <li>5,000 free operations per month</li>
+                <li>10,000 free inputs</li>
+            </ul>
+
+            <h5>Train your own model</h5>
+
+            <ul>
+                <li>10 free custom concepts</li>
+            </ul>
+
+            <h4>Standard Tier (pay as you go)</h4>
+            <h5>Search and predict</h5>
+            <ul>
+                <li>5,000 free operations per month</li>
+                <li>+ $1.20 per 1,000 operations</li>
+                <li>10,000 free inputs</li>
+                <li>+ $0.80 per 1,000 operations</li>
+
+            </ul>
+
+            <h5>10,000 free inputs</h5>
+
+            <ul>
+                <li>10 free custom concepts</li>
+                <li>+ $0.46 per concept, per month</li>
+                <li>+ $3.20 per 1,000 custom predict operations</li>
+            </ul>
+
+            <h4>Enterprise</h4>
+            <p>No price published.</p>
+
+
+
+        </div>
+
+        <div class="row">
+            <h3><a href="https://imagga.com/pricing" target="_blank">Imagaa</a></h3>
+            <p><img src="/images/imagga.png" title="Imagga"></p>
+        </div>
+
+        <div class="row">
+            <h3><a href="https://azure.microsoft.com/en-us/pricing/details/cognitive-services/computer-vision/" target="_blank">Microsoft Cognitive Services Pricing</a></h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Tier</th>
+                    <th>Features</th>
+                    <th class="show-small column-4">Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Computer Vision API – Free</td>
+                    <td>&nbsp;</td>
+                    <td>5,000 transactions free per month</td>
+                </tr>
+                <tr>
+                    <td>S1</td>
+                    <td> Up to 10 transactions per second <br> Can be used
+                        for the following operations: Tag, Face, GetThumbnail Color, and Image Type
+                    </td>
+                    <td>0-1M transactions &nbsp;–&nbsp; <span>$1</span>
+                        per 1,000 transactions <br> 1M-5M transactions &nbsp;–&nbsp; <span>$0.80</span>
+                        per 1,000 transactions <br> 5M+ transactions &nbsp;–&nbsp; <span>$0.65</span>
+                        per 1,000 transactions <br></td>
+                </tr>
+                <tr>
+                    <td>S2</td>
+                    <td> Up to 10 transactions per second <br> Can be used
+                        for the following operations: OCR (printed), Adult, Celebrity, and Landmark
+                    </td>
+                    <td> 0-1M transactions &nbsp;–&nbsp; <span>$1.50</span>
+                        per 1,000 transactions <br> 1M-5M transactions &nbsp;–&nbsp; <span>$1</span>
+                        per 1,000 transactions <br> 5M+ transactions &nbsp;–&nbsp; <span>$0.65</span>
+                        per 1,000 transactions <br></td>
+                </tr>
+                <tr>
+                    <td>S3</td>
+                    <td> Up to 10 transactions per second <br> Can be used
+                        for the following operations: Describe and OCR (handwriting)
+                    </td>
+                    <td><span class="price-data ">$2.50</span> per
+                        1,000 transactions
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <h3><a href="https://cloudsight.ai/pricing" target="_blank">CloudSite</a></h3>
+            <p><img src="/images/cloudsite.png" title="cloudsite"></p>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

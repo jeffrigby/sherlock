@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <p><img src="{{ asset(image_path) | imagine_filter('preview') }}" title="{{ image_path }}" /></p>
+            <p><a href="/report/{{ image_id }}?reset=1">Reset Cache</a></p>
+        </div>
+
+        <div class="row">
+            <h2>Results</h2>
+            {% for section in sections %}
+                <div class="panel panel-default" id="{{ section }}">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a role="button" data-toggle="collapse" href="#{{ section }}-data" aria-expanded="false" aria-controls="{{ section }}-data">{{ section | upper }}</a></h3>
+                    </div>
+                    <div class="panel-body collapse in" id="{{ section }}-data">
+                        <div class="tags"><span class="glyphicon glyphicon-refresh spinning"></span> Loading</div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><a role="button" data-toggle="collapse" href="#{{ section }}-json" aria-expanded="false" aria-controls="{{ section }}-json">Raw Data</a></div>
+                            <div class="json collapse" id="{{ section }}-json"></div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    // Fetch all the results
+    $.getJSON( "/api/google/{{ image_id }}{{ reset }}", function( data ) {
+
+      var table = outputTable(data.simple);
+      $( "#google .tags" ).html(table);
+
+      delete data.simple;
+
+      var str = JSON.stringify(data, null, 2);
+      $( "#google .json" ).html( '<pre>' + str + '</pre>' );
+
+    });
+
+    $.getJSON( "/api/clarifai/{{ image_id }}{{ reset }}", function( data ) {
+
+      var table = outputTable(data.simple);
+      $( "#clarifai .tags" ).html(table);
+
+      delete data.simple;
+
+      var str = JSON.stringify(data, null, 2);
+      $( "#clarifai .json" ).html( '<pre>' + str + '</pre>' );
+    });
+
+    $.getJSON( "/api/microsoft/{{ image_id }}{{ reset }}", function( data ) {
+      var table = '';
+      if (data.json.description.captions[0].text) {
+        table += '<div>Caption: '+ data.json.description.captions[0].text + ' (' + data.json.description.captions[0].confidence + ')</div>';
+      }
+
+      if (data.json.description.tags) {
+        table += '<div>Tags: ' + data.json.description.tags.join(', ') + '</div>';
+      }
+
+      table += outputTable(data.simple);
+
+      $( "#microsoft .tags" ).html(table);
+
+      delete data.simple;
+
+      var str = JSON.stringify(data, null, 2);
+
+      $( "#microsoft .json" ).html( '<pre>' + str + '</pre>' );
+    });
+
+    $.getJSON( "/api/imagga/{{ image_id }}{{ reset }}", function( data ) {
+      var table = outputTable(data.simple);
+      $( "#imagga .tags" ).html(table);
+
+      delete data.simple;
+
+      var str = JSON.stringify(data, null, 2);
+      $( "#imagga .json" ).html( '<pre>' + str + '</pre>' );
+    });
+
+    $.getJSON( "/api/cloudsite/{{ image_id }}{{ reset }}", function( data ) {
+
+      $( "#cloudsite .tags" ).html('<p>' + data.tags.name + '</p>');
+
+      var str = JSON.stringify(data, null, 2);
+      $( "#cloudsite .json" ).html( '<pre>' + str + '</pre>' );
+    });
+</script>
+{% endblock %}

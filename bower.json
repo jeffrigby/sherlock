@@ -1,0 +1,20 @@
+{
+  "name": "sherlockTest",
+  "authors": [
+    "Jeffrey Rigby <jrigby@mac.com>"
+  ],
+  "description": "",
+  "main": "web/app.php",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-fileinput": "^4.4.0"
+  }
+}
