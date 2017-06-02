@@ -9,14 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Image;
 use AppBundle\Form\ImageType;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
-use Google\Cloud\Vision\VisionClient;
-use GoogleCloudVision;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use DarrynTen\Clarifai\Clarifai;
-use Andaris\ComputerVision\Client as MSClient;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use Aws\S3\S3Client;
 use Aws\Rekognition\RekognitionClient;
@@ -41,9 +37,6 @@ class DefaultController extends Controller
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
             $file = $image->getImage();
 
-            // Generate a unique name for the file before saving it
-//            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
             $file->move(
               $this->getParameter('images_directory'),
               $file->getClientOriginalName()
@@ -52,7 +45,7 @@ class DefaultController extends Controller
             $image->setImage($file->getClientOriginalName());
             $em->persist($image);
             $em->flush();
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect("/report/{$image->getId()}");
         }
 
         // replace this example code with whatever you need
@@ -163,7 +156,7 @@ class DefaultController extends Controller
         'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         'image_path' => $image_path,
         'image_id' => $id,
-        'reset' => !empty($_GET['reset']) ? '?reset=1' : NULL,
+        'reset' => !empty($_GET['reset']) ? 'true' : 'false',
         'sections' => ['google', 'clarifai', 'microsoft', 'imagga', 'cloudsite']
       ]);
     }
@@ -262,7 +255,7 @@ class DefaultController extends Controller
       }
 
       // This API takes a while to tag
-      sleep(5);
+      sleep(10);
 
       if (!empty($tags['uploaded_file']['token'])) {
         try {
@@ -280,6 +273,7 @@ class DefaultController extends Controller
       }
 
       if ($tags['tags']['status'] === 'completed') {
+        $tags['simple']['header'][] = '<p>' . $tags['tags']['name'] . '</p>';
         $cache->set($cache_key, $tags);
       }
       $tags['cached'] = FALSE;
@@ -347,6 +341,15 @@ class DefaultController extends Controller
             'score' => $t['confidence'],
           ];
         }
+      }
+
+      if (!empty($tags['json']['description']['captions'][0]['text'])) {
+        $simple['header'][] = "Description: {$tags['json']['description']['captions'][0]['text']}";
+        $simple['header'][] = "Confidence: {$tags['json']['description']['captions'][0]['confidence']}";
+      }
+
+      if (is_array($tags['json']['description']['tags'])) {
+        $simple['header'][] = 'Tags: ' . implode(', ', $tags['json']['description']['tags']);
       }
 
       $tags['simple'] = $simple;
@@ -553,7 +556,9 @@ class DefaultController extends Controller
         'LANDMARK_DETECTION',
         'LOGO_DETECTION',
         'SAFE_SEARCH_DETECTION',
-        'IMAGE_PROPERTIES'
+        'IMAGE_PROPERTIES',
+        'WEB_DETECTION',
+
       ];
       $uri = 'https://vision.googleapis.com/v1/images:annotate?key=' . $this->getParameter('google_api_key');
       $client = $this->getGuzzleClient();
@@ -579,7 +584,7 @@ class DefaultController extends Controller
       $simple = [];
       if (!empty($tags['LABEL_DETECTION'][0]['labelAnnotations'])) {
         foreach ($tags['LABEL_DETECTION'][0]['labelAnnotations'] as $tag) {
-          $simple['labels'][] = [
+          $simple['LABEL_DETECTION'][] = [
             'tag' => $tag['description'],
             'score' => $tag['score']
           ];
@@ -588,9 +593,80 @@ class DefaultController extends Controller
 
       if (!empty($tags['LANDMARK_DETECTION'][0]['landmarkAnnotations'])) {
         foreach ($tags['LANDMARK_DETECTION'][0]['landmarkAnnotations'] as $tag) {
-          $simple['landmarks'][] = [
+
+          $simple['LANDMARK_DETECTION'][] = [
+            'tag' => $tag['description'] . ' (load map)',
+            'score' => $tag['score'],
+            'link' => "http://maps.google.com/?q={$tag['locations'][0]['latLng']['latitude']},{$tag['locations'][0]['latLng']['longitude']}"
+          ];
+        }
+      }
+
+      if (!empty($tags['LOGO_DETECTION'][0]['logoAnnotations'])) {
+        foreach ($tags['LOGO_DETECTION'][0]['logoAnnotations'] as $tag) {
+          $simple['LOGO_DETECTION'][] = [
             'tag' => $tag['description'],
-            'score' => $tag['score']
+            'score' => $tag['score'],
+          ];
+        }
+      }
+
+      if (!empty($tags['WEB_DETECTION'][0]['webDetection']['webEntities'])) {
+        foreach ($tags['WEB_DETECTION'][0]['webDetection']['webEntities'] as $tag) {
+          if (empty($tag['description'])) continue;
+          $simple['WEB_DETECTION-ENTITIES'][] = [
+            'tag' => $tag['description'],
+            'score' => !empty($tag['score']) ? $tag['score'] : NULL,
+          ];
+        }
+      }
+
+      if (!empty($tags['WEB_DETECTION'][0]['webDetection']['webEntities'])) {
+        foreach ($tags['WEB_DETECTION'][0]['webDetection']['webEntities'] as $tag) {
+          if (empty($tag['description'])) continue;
+          $simple['WEB_DETECTION-ENTITIES'][] = [
+            'tag' => !empty($tag['description']) ? $tag['description'] : NULL,
+            'score' => !empty($tag['score']) ? $tag['score'] : NULL,
+          ];
+        }
+      }
+
+      if (!empty($tags['WEB_DETECTION'][0]['webDetection']['fullMatchingImages'])) {
+        foreach ($tags['WEB_DETECTION'][0]['webDetection']['fullMatchingImages'] as $tag) {
+          $simple['WEB_DETECTION-FULL-MATCHING'][] = [
+            'tag' => !empty($tag['url']) ? $tag['url'] : NULL,
+//            'score' => NULL,
+            'link' => !empty($tag['url']) ? $tag['url'] : NULL
+          ];
+        }
+      }
+
+      if (!empty($tags['WEB_DETECTION'][0]['webDetection']['partialMatchingImages'])) {
+        foreach ($tags['WEB_DETECTION'][0]['webDetection']['partialMatchingImages'] as $tag) {
+          $simple['WEB_DETECTION-PARTIAL-MATCHING'][] = [
+            'tag' => !empty($tag['url']) ? $tag['url'] : NULL,
+//            'score' => NULL,
+            'link' => !empty($tag['url']) ? $tag['url'] : NULL
+          ];
+        }
+      }
+
+      if (!empty($tags['WEB_DETECTION'][0]['webDetection']['visuallySimilarImages'])) {
+        foreach ($tags['WEB_DETECTION'][0]['webDetection']['visuallySimilarImages'] as $tag) {
+          $simple['WEB_DETECTION-SIMILAR-IMAGES'][] = [
+            'tag' => !empty($tag['url']) ? $tag['url'] : NULL,
+//            'score' => NULL,
+            'link' => !empty($tag['url']) ? $tag['url'] : NULL
+          ];
+        }
+      }
+
+      if (!empty($tags['WEB_DETECTION'][0]['webDetection']['pagesWithMatchingImages'])) {
+        foreach ($tags['WEB_DETECTION'][0]['webDetection']['pagesWithMatchingImages'] as $tag) {
+          $simple['WEB_DETECTION-PAGES-WITH-MATCHING'][] = [
+            'tag' => !empty($tag['url']) ? $tag['url'] : NULL,
+            //            'score' => NULL,
+            'link' => !empty($tag['url']) ? $tag['url'] : NULL
           ];
         }
       }

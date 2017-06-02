@@ -49,16 +49,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.28.6",
+            "version": "3.28.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "9c33b9dff5848adc25199f88487b1927edcfe074"
+                "reference": "942d5c026b537fe76571b24aa02bc8abb9f24bb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9c33b9dff5848adc25199f88487b1927edcfe074",
-                "reference": "9c33b9dff5848adc25199f88487b1927edcfe074",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/942d5c026b537fe76571b24aa02bc8abb9f24bb1",
+                "reference": "942d5c026b537fe76571b24aa02bc8abb9f24bb1",
                 "shasum": ""
             },
             "require": {
@@ -125,7 +125,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-05-31T19:00:01+00:00"
+            "time": "2017-06-01T20:01:52+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -1194,16 +1194,16 @@
         },
         {
             "name": "google/cloud",
-            "version": "v0.32.0",
+            "version": "v0.32.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/google-cloud-php.git",
-                "reference": "8412656fa05b041174b248b74064975494ca0a1b"
+                "reference": "3c917dcf0864a98036b2a24267492f195545fe9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php/zipball/8412656fa05b041174b248b74064975494ca0a1b",
-                "reference": "8412656fa05b041174b248b74064975494ca0a1b",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/google-cloud-php/zipball/3c917dcf0864a98036b2a24267492f195545fe9a",
+                "reference": "3c917dcf0864a98036b2a24267492f195545fe9a",
                 "shasum": ""
             },
             "require": {
@@ -1231,7 +1231,7 @@
             "suggest": {
                 "google/gax": "Required to support gRPC",
                 "google/proto-client-php": "Required to support gRPC",
-                "symfony/lock": "Required for the Spanner cached based session pool. Please require the following commit: dev-master#1ba6ac9"
+                "symfony/lock": "Required for the Spanner cached based session pool. Please require the following commit: 3.3.x-dev#1ba6ac9"
             },
             "type": "library",
             "extra": {
@@ -1288,7 +1288,7 @@
                 "translation",
                 "vision"
             ],
-            "time": "2017-05-25T15:15:05+00:00"
+            "time": "2017-06-01T16:02:04+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

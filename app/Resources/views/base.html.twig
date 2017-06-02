@@ -5,7 +5,9 @@
         <title>{% block title %}Sherlock Image API Test!{% endblock %}</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-fileinput/css/fileinput.min.css') }}">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
         <link rel="stylesheet" href="/styles.css">
+        <link rel="stylesheet" href="/atom-one-dark.css">
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
@@ -26,7 +28,15 @@
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
         <script src="{{ asset('assets/vendor/bootstrap-fileinput/js/fileinput.min.js') }}"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="/main.js"></script>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $('pre code').each(function(i, block) {
+              hljs.highlightBlock(block);
+            });
+          });
+        </script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

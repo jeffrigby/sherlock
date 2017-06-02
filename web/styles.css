@@ -3,6 +3,14 @@
     height: 300px;
 }
 
+.header-actions {
+    list-style: none;
+}
+
+.header-actions li {
+    padding-right: 5px;
+}
+
 .glyphicon.spinning {
     animation: spin 1s infinite linear;
     -webkit-animation: spin2 1s infinite linear;
@@ -16,4 +24,4 @@
 @-webkit-keyframes spin2 {
     from { -webkit-transform: rotate(0deg); }
     to { -webkit-transform: rotate(360deg); }
-}
+
