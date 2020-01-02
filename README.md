@@ -1,4 +1,4 @@
-sherlockTest
+Sherlock
 ============
 
-A Symfony project created on May 24, 2017, 5:32 am.
+A POC for image recognition APIs
